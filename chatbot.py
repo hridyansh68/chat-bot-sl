@@ -3,10 +3,12 @@ import streamlit as st
 
 st.title("Chat gpt clone")
 
+openai.api_key = None
+
 website_url = st.secrets.get("WEB_SITE_URL")
 
 with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
+    openai.api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
     f"Built by Hridyansh ({website_url})"
 
 if "openai_model" not in st.session_state:
@@ -19,11 +21,10 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("What is up?"):
-    if not openai_api_key:
+if prompt := st.chat_input("How can ChatGPT help you today?"):
+    if not openai.api_key:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
-
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
